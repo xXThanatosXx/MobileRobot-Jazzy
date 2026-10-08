@@ -1,6 +1,40 @@
+## Entorno ROS 2 Jazzy
+
+Esta práctica usa Ubuntu 24.04 Noble y ROS 2 Jazzy. Las capturas y videos originales son referencias históricas.
+Instale primero las dependencias mediante los scripts de la rama `main`.
+
+```bash
+source /opt/ros/jazzy/setup.bash
+git clone --branch Clase-Odometry --single-branch https://github.com/xXThanatosXx/MobileRobot-Jazzy.git
+cd MobileRobot-Jazzy/difrobot_ws
+rosdep install --from-paths src --ignore-src --rosdistro jazzy -y
+colcon build --symlink-install
+source install/setup.bash
+```
+
+### Simulación en Jazzy
+
+En terminales separadas, cargue `/opt/ros/jazzy/setup.bash` y el `install/setup.bash` de este workspace:
+
+```bash
+ros2 launch difrobot_description gazebo.launch.py
+```
+
+```bash
+ros2 launch difrobot_controller controller.launch.py use_python:=true
+```
+
+```bash
+ros2 topic pub --use-sim-time --rate 10 /difrobot_controller/cmd_vel geometry_msgs/msg/TwistStamped "{header: auto, twist: {linear: {x: 0.02}, angular: {z: 0.0}}}"
+```
+
+Para usar el controlador diferencial estándar: `use_simple_controller:=false`.
+El puente publica `/clock` y, en la rama IMU, `/imu`. Los nodos de odometría usan tiempo simulado.
+En un entorno sin pantalla puede iniciar el servidor con `gz_args:='-r -s <ruta-absoluta>/worlds/difrobot.sdf'`.
+
 <h1 align="center">Clase Robot Odometría </h1>
 
-El objetivo de la presente práctica es conocer los conceptos básico de ROS2 Humble (paquete, nodo, topicos, info y rqt), para la simulación del comportamiento de un robot móvil en Gazebo.
+El objetivo de la presente práctica es conocer los conceptos básico de ROS 2 Jazzy (paquete, nodo, topicos, info y rqt), para la simulación del comportamiento de un robot móvil en Gazebo.
 
 ### Compilación del proyecto 
 
@@ -14,13 +48,13 @@ ros2 pkg create --build-type ament_cmake difrobot_firmware
 Clonar repositorio
 ```
 ```bash
-git clone --branch Clase-Odometry --single-branch https://github.com/xXThanatosXx/MobileRobot.git
+git clone --branch Clase-Odometry --single-branch https://github.com/xXThanatosXx/MobileRobot-Jazzy.git
 
 ```
 Mover archivos a home
 
 ```bash
-mv ~/MobileRobot/difrobot_ws ~/difrobot_ws
+mv ~/MobileRobot-Jazzy/difrobot_ws ~/difrobot_ws
 ```
 Limpiar Cache de CMake
 ```bash
@@ -38,7 +72,7 @@ sudo apt-get install libserial-dev
 Instalar el paquete `pyserial`:
 
 ```bash
-   pip install pyserial
+   sudo apt install python3-serial
 ```
 ## En caso de tener inconvenientes
 Limpiar cache
@@ -52,7 +86,8 @@ rosdep install --from-paths src --ignore-src -r -y
 Aplicar cambios
 
 ```bash
-source /usr/share/gazebo-11/setup.sh
+source /opt/ros/jazzy/setup.bash
+source install/setup.bash
 
 ```
 
@@ -69,7 +104,7 @@ El nodo llamado `simple_serial_transmitter` se suscribe a un tópico de ROS2 (`s
 
 ### Requisitos
 
-- ROS2 (Humble o compatible).
+- ROS2 (jazzy o compatible).
 - Biblioteca `pyserial` para manejar la comunicación serial.
 - Un dispositivo conectado al puerto serial que reciba y procese los datos (por ejemplo, Arduino).
 
@@ -202,7 +237,7 @@ El nodo llamado `simple_serial_receiver` se conecta a un puerto serial configura
 
 ### Requisitos
 
-- ROS2 (en este caso, Humble o compatible).
+- ROS2 (en este caso, jazzy o compatible).
 - Biblioteca `pyserial` para interactuar con el puerto serial.
 - Un dispositivo (como un Arduino) conectado al puerto serial que envíe datos.
 

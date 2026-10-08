@@ -1,6 +1,0 @@
-[console_scripts]
-simple_service_client = difrobot_py_examples.simple_service_client:main
-simple_service_server = difrobot_py_examples.simple_service_server:main
-simple_tf_kinematics = difrobot_py_examples.simple_tf_kinematics:main
-simple_turtlesim_kinematics = difrobot_py_examples.simple_turtlesim_kinematics:main
-

@@ -1,6 +1,0 @@
-[31mCMake Error at CMakeLists.txt:25 (install):
-  install does not recognize sub-command
-  difrobot_controller/simple_controller.py
-
-[0m
-gmake: *** [Makefile:226: cmake_check_build_system] Error 1

@@ -1,6 +1,0 @@
-Invoking command in '/home/ros/difrobot_ws/build/difrobot_msgs': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/ros/difrobot_ws/src/difrobot_msgs -DCMAKE_INSTALL_PREFIX=/home/ros/difrobot_ws/install/difrobot_msgs
-Invoked command in '/home/ros/difrobot_ws/build/difrobot_msgs' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/ros/difrobot_ws/src/difrobot_msgs -DCMAKE_INSTALL_PREFIX=/home/ros/difrobot_ws/install/difrobot_msgs
-Invoking command in '/home/ros/difrobot_ws/build/difrobot_msgs': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/ros/difrobot_ws/build/difrobot_msgs -- -j2 -l2
-Invoked command in '/home/ros/difrobot_ws/build/difrobot_msgs' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/ros/difrobot_ws/build/difrobot_msgs -- -j2 -l2
-Invoking command in '/home/ros/difrobot_ws/build/difrobot_msgs': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/ros/difrobot_ws/build/difrobot_msgs
-Invoked command in '/home/ros/difrobot_ws/build/difrobot_msgs' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/ros/difrobot_ws/build/difrobot_msgs

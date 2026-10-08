@@ -1,6 +1,0 @@
-Invoking command in '/home/ros/difrobot_ws/build/difrobot_controller': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/ros/difrobot_ws/src/difrobot_controller -DCMAKE_INSTALL_PREFIX=/home/ros/difrobot_ws/install/difrobot_controller
-Invoked command in '/home/ros/difrobot_ws/build/difrobot_controller' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/ros/difrobot_ws/src/difrobot_controller -DCMAKE_INSTALL_PREFIX=/home/ros/difrobot_ws/install/difrobot_controller
-Invoking command in '/home/ros/difrobot_ws/build/difrobot_controller': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/ros/difrobot_ws/build/difrobot_controller -- -j2 -l2
-Invoked command in '/home/ros/difrobot_ws/build/difrobot_controller' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/ros/difrobot_ws/build/difrobot_controller -- -j2 -l2
-Invoking command in '/home/ros/difrobot_ws/build/difrobot_controller': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/ros/difrobot_ws/build/difrobot_controller
-Invoked command in '/home/ros/difrobot_ws/build/difrobot_controller' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/ros/difrobot_ws/build/difrobot_controller
