@@ -1,7 +1,18 @@
+## Entorno ROS 2 Jazzy
+
+Esta práctica usa Ubuntu 24.04 Noble y ROS 2 Jazzy. Las capturas y videos originales son referencias históricas.
+Instale primero las dependencias mediante los scripts de la rama `main`.
+
+```bash
+source /opt/ros/jazzy/setup.bash
+git clone --branch Clase-TurtleSim --single-branch https://github.com/xXThanatosXx/MobileRobot-Jazzy.git
+
+```
+
 # Clase Turtle Sim
 
 
-El objetivo de la presente práctica es conocer los conceptos básico de ROS2 Humble (paquete, nodo, topicos, info y rqt), para la simulación del comportamiento de un robot móvil
+El objetivo de la presente práctica es conocer los conceptos básico de ROS 2 Jazzy (paquete, nodo, topicos, info y rqt), para la simulación del comportamiento de un robot móvil
 
 ### Instalación de paquete Turtlesim
 
@@ -25,7 +36,7 @@ Crtl + alt + t
 
 ```
 ```bash
-sudo apt install ros-humble-turtlesim
+sudo apt install ros-jazzy-turtlesim
 ```
 Revisar si los paquetes están instalados:
 ```bash
@@ -340,7 +351,7 @@ ros2 run difrobot_py_examples simple_turtlesim_kinematics
 ```
 
 ## Restablecer ventana RQT
-Como volver a la configuración de ventanas en rqt en ros2 humble
+Como volver a la configuración de ventanas en rqt en ros2 jazzy
 ```bash
 rm -rf ~/.config/ros.org/rqt_gui.ini
 
