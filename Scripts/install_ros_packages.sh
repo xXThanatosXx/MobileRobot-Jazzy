@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-# Install the additional ROS 2 Humble packages used by this project.
+# Install the additional ROS 2 jazzy packages used by this project.
 set -Eeuo pipefail
 
-ROS_DISTRO="humble"
+ROS_DISTRO="jazzy"
 
 info() {
     printf '\n\033[34m>>>\033[0m %s\n' "$*"
@@ -47,25 +47,24 @@ if [[ "${EUID}" -eq 0 ]]; then
 fi
 
 if [[ ! -f "/opt/ros/${ROS_DISTRO}/setup.bash" ]]; then
-    fail "ROS 2 Humble is not installed. Run ros2_install.sh first."
+    fail "ROS 2 jazzy is not installed. Run ros2_install.sh first."
 fi
 
 if [[ -r /etc/os-release ]]; then
     # shellcheck disable=SC1091
     source /etc/os-release
-    if [[ "${ID:-}" != "ubuntu" || "${VERSION_CODENAME:-}" != "jammy" ]]; then
-        fail "These packages target ROS 2 Humble on Ubuntu 22.04 Jammy."
+    if [[ "${ID:-}" != "ubuntu" || "${VERSION_CODENAME:-}" != "noble" ]]; then
+        fail "These packages target ROS 2 jazzy on Ubuntu 24.04 Noble."
     fi
 fi
 
-info "Installing additional ROS 2 Humble packages"
+info "Installing additional ROS 2 jazzy packages"
 apt_update
 sudo apt install -y \
     "ros-${ROS_DISTRO}-ros2-controllers" \
-    "ros-${ROS_DISTRO}-gazebo-ros" \
-    "ros-${ROS_DISTRO}-gazebo-ros-pkgs" \
+    "ros-${ROS_DISTRO}-ros-gz" \
     "ros-${ROS_DISTRO}-ros2-control" \
-    "ros-${ROS_DISTRO}-gazebo-ros2-control" \
+    "ros-${ROS_DISTRO}-gz-ros2-control" \
     "ros-${ROS_DISTRO}-joint-state-publisher" \
     "ros-${ROS_DISTRO}-joint-state-publisher-gui" \
     "ros-${ROS_DISTRO}-xacro" \
@@ -80,8 +79,8 @@ sudo apt install -y \
     "ros-${ROS_DISTRO}-tf-transformations" \
     "ros-${ROS_DISTRO}-plotjuggler" \
     "ros-${ROS_DISTRO}-plotjuggler-ros" \
-    python3-pip
+    python3-numpy python3-transforms3d python3-serial libeigen3-dev libserial-dev
 
-python3 -m pip install --user transforms3d
 
-printf '\nAdditional ROS 2 Humble packages installed successfully.\n'
+
+printf '\nAdditional ROS 2 jazzy packages installed successfully.\n'

@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-# Install ROS 2 Humble on Ubuntu 22.04 (Jammy).
+# Install ROS 2 jazzy on Ubuntu 24.04 (Noble).
 set -Eeuo pipefail
 
-ROS_DISTRO="humble"
+ROS_DISTRO="jazzy"
 WORKSPACE_NAME="colcon_ws"
-BASHRC_MARKER="# MobileRobot ROS 2 Humble"
+BASHRC_MARKER="# MobileRobot ROS 2 jazzy"
 
 info() {
     printf '\n\033[34m>>>\033[0m %s\n' "$*"
@@ -49,16 +49,16 @@ if [[ "${EUID}" -eq 0 ]]; then
 fi
 
 if [[ ! -r /etc/os-release ]]; then
-    fail "This script must run on Ubuntu 22.04."
+    fail "This script must run on Ubuntu 24.04."
 fi
 
 # shellcheck disable=SC1091
 source /etc/os-release
-if [[ "${ID:-}" != "ubuntu" || "${VERSION_CODENAME:-}" != "jammy" ]]; then
-    fail "ROS 2 Humble requires Ubuntu 22.04 Jammy. Detected: ${PRETTY_NAME:-unknown}."
+if [[ "${ID:-}" != "ubuntu" || "${VERSION_CODENAME:-}" != "noble" ]]; then
+    fail "ROS 2 jazzy requires Ubuntu 24.04 Noble. Detected: ${PRETTY_NAME:-unknown}."
 fi
 
-info "ROS 2 Humble will be installed in Ubuntu 22.04 Jammy."
+info "ROS 2 jazzy will be installed in Ubuntu 24.04 Noble."
 read -r -p "Press Enter to continue or Ctrl+C to cancel..."
 
 info "Configuring locale and Ubuntu repositories"
