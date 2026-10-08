@@ -5,7 +5,7 @@
   <version>0.0.0</version>
   <description>TODO: Package description</description>
   <maintainer email="38089172+Shadowelec1986@users.noreply.github.com">user</maintainer>
-  <license>TODO: License declaration</license>
+  <license>MIT</license>
 
 
   <depend>rclpy</depend>

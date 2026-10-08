@@ -1,7 +1,41 @@
+## Entorno ROS 2 Jazzy
+
+Esta práctica usa Ubuntu 24.04 Noble y ROS 2 Jazzy. Las capturas y videos originales son referencias históricas.
+Instale primero las dependencias mediante los scripts de la rama `main`.
+
+```bash
+source /opt/ros/jazzy/setup.bash
+git clone --branch Clase-robot-Gazebo --single-branch https://github.com/xXThanatosXx/MobileRobot-Jazzy.git
+cd MobileRobot-Jazzy/difrobot_ws
+rosdep install --from-paths src --ignore-src --rosdistro jazzy -y
+colcon build --symlink-install
+source install/setup.bash
+```
+
+### Simulación en Jazzy
+
+En terminales separadas, cargue `/opt/ros/jazzy/setup.bash` y el `install/setup.bash` de este workspace:
+
+```bash
+ros2 launch difrobot_description gazebo.launch.py
+```
+
+```bash
+ros2 launch difrobot_controller controller.launch.py use_python:=true
+```
+
+```bash
+ros2 topic pub --use-sim-time --rate 10 /difrobot_controller/cmd_vel geometry_msgs/msg/TwistStamped "{header: auto, twist: {linear: {x: 0.02}, angular: {z: 0.0}}}"
+```
+
+Para usar el controlador diferencial estándar: `use_simple_controller:=false`.
+El puente publica `/clock` y, en la rama IMU, `/imu`. Los nodos de odometría usan tiempo simulado.
+En un entorno sin pantalla puede iniciar el servidor con `gz_args:='-r -s <ruta-absoluta>/worlds/difrobot.sdf'`.
+
 # Clase Robot Gazebo
 
 
-El objetivo de la presente práctica es conocer los conceptos básico de ROS2 Humble (paquete, nodo, topicos, info y rqt), para la simulación del comportamiento de un robot móvil en Gazebo.
+El objetivo de la presente práctica es conocer los conceptos básico de ROS 2 Jazzy (paquete, nodo, topicos, info y rqt), para la simulación del comportamiento de un robot móvil en Gazebo.
 
 ### Compilación del proyecto de clase
 
@@ -12,13 +46,13 @@ El objetivo de la presente práctica es conocer los conceptos básico de ROS2 Hu
 
 Clonar repositorio
 ```bash
-git clone --branch Clase-robot-Gazebo --single-branch https://github.com/xXThanatosXx/MobileRobot.git
+git clone --branch Clase-robot-Gazebo --single-branch https://github.com/xXThanatosXx/MobileRobot-Jazzy.git
 
 ```
 mover archivos a home
 
 ```bash
-mv ~/MobileRobot/difrobot_ws ~/difrobot_ws
+mv ~/MobileRobot-Jazzy/difrobot_ws ~/difrobot_ws
 ```
 Limpiar Cache de CMake
 ```bash
@@ -29,38 +63,7 @@ compilar
 ```bash
 colcon build
 ```
-Modificar el registro de Gazebo 
-```bash
-sudo nano /usr/share/gazebo/setup.sh
-
-```
-Remplezar las lineas
-```bash
-export GAZEBO_MASTER_URI=""
-export GAZEBO_MODEL_DATABASE_URI=""
-```
-Modificar el registro de gazebo 11
-```bash
-sudo nano /usr/share/gazebo-11/setup.sh
-```
-```bash
-export GAZEBO_MASTER_URI=""
-export GAZEBO_MODEL_DATABASE_URI=""
-```
-Copiar carpeta models
-```bash
-cp -r ~/difrobot_ws/src/difrobot_description/models ~/.gazebo
-
-```
-Aplicar cambios
-
-```bash
-source /usr/share/gazebo-11/setup.sh
-
-```
-
-
-
+Los recursos y el mundo se configuran automáticamente en `gazebo.launch.py` mediante `GZ_SIM_RESOURCE_PATH`.
 
 ### Configuración de urdf para Gazebo
 
@@ -73,9 +76,33 @@ source /usr/share/gazebo-11/setup.sh
 
   <!-- Include Gazebo Parameters -->
   <xacro:include filename="$(find difrobot_description)/urdf/difrobot_gazebo.xacro" />
+  <xacro:include filename="$(find difrobot_description)/urdf/difrobot_ros2_control.xacro" />
+
+  <!-- Definir Materiales -->
+  <material name="red">
+    <color rgba="1 0 0 1"/>
+  </material>
+
+  <material name="blue">
+    <color rgba="0 0 1 1"/>
+  </material>
+
+  <material name="green">
+    <color rgba="0 1 0 1"/>
+  </material>
+
+  <material name="yellow">
+    <color rgba="1 1 0 1"/> <!-- Amarillo opaco -->
+  </material>
+
+  <material name="purple">
+    <color rgba="0.5 0 0.5 1"/> <!-- Púrpura opaco -->
+  </material>
+
+  <!-- Enlaces y Joints -->
 
   <link name="base_footprint"/>
-  
+
   <link name="base_link">
     <inertial>
       <origin xyz="0 0 0.04" rpy="0.0 0.25 0.3" />
@@ -89,6 +116,7 @@ source /usr/share/gazebo-11/setup.sh
       <geometry>
         <mesh filename="package://difrobot_description/meshes/base_link.STL" />
       </geometry>
+      <material name="blue"/>  <!-- Asignar color azul -->
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
@@ -117,6 +145,14 @@ source /usr/share/gazebo-11/setup.sh
       <geometry>
         <mesh filename="package://difrobot_description/meshes/wheel_right_link.STL" />
       </geometry>
+      <material name="green"/>  <!-- Asignar color verde -->
+      <gazebo>
+        <material>
+          <ambient>0 0 1 1</ambient>
+          <diffuse>0 0 1 1</diffuse>
+          <specular>0 0 0 1</specular>
+        </material>
+      </gazebo>
     </visual>
     <collision>
       <origin xyz="0 -0.015 0" rpy="1.57 0 0" />
@@ -133,8 +169,7 @@ source /usr/share/gazebo-11/setup.sh
     <axis xyz="0 1 0" />
   </joint>
   
-  <link
-    name="wheel_left_link">
+  <link name="wheel_left_link">
     <inertial>
       <origin xyz="0 0.014 0" rpy="0 0 0" />
       <mass value="0.0530086043217644" />
@@ -147,6 +182,7 @@ source /usr/share/gazebo-11/setup.sh
       <geometry>
         <mesh filename="package://difrobot_description/meshes/wheel_left_link.STL" />
       </geometry>
+      <material name="green"/>  <!-- Asignar color verde -->
     </visual>
     <collision>
       <origin xyz="0 0.015 0" rpy="-1.57 0 0" />
@@ -176,6 +212,7 @@ source /usr/share/gazebo-11/setup.sh
       <geometry>
         <mesh filename="package://difrobot_description/meshes/caster_front_link.STL" />
       </geometry>
+      <material name="yellow"/>  <!-- Asignar color amarillo -->
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
@@ -205,6 +242,7 @@ source /usr/share/gazebo-11/setup.sh
       <geometry>
         <mesh filename="package://difrobot_description/meshes/caster_rear_link.STL" />
       </geometry>
+      <material name="purple"/>  <!-- Asignar color púrpura -->
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
@@ -222,6 +260,7 @@ source /usr/share/gazebo-11/setup.sh
   </joint>
 
 </robot>
+
 ```
 
 2. Cree un archivo (difrobot_gazebo.xacro) en la carpeta urdf
@@ -246,10 +285,29 @@ Modifique los siguientes parametros:
 
 <robot name="difrobot" xmlns:xacro="http://ros.org/wiki/xacro">
 
+
+  
+
+  
+  
+
+  
+  
+
+  
+  
+  
+  
+
+
+
+
+
+
   <!-- Wheels -->
   <gazebo reference="wheel_left_link">
-    <mu1>1000000000000000.0</mu1>
-    <mu2>1000000000000000.0</mu2>
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
     <kp>1000000000000.0</kp>
     <kd>10.0</kd>
     <minDepth>0.001</minDepth>
@@ -258,8 +316,8 @@ Modifique los siguientes parametros:
   </gazebo>
   
   <gazebo reference="wheel_right_link">
-    <mu1>1000000000000000.0</mu1>
-    <mu2>1000000000000000.0</mu2>
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
     <kp>1000000000000.0</kp>
     <kd>10.0</kd>
     <minDepth>0.001</minDepth>
@@ -286,6 +344,12 @@ Modifique los siguientes parametros:
     <maxVel>1.0</maxVel>
   </gazebo>
 
+  <gazebo>
+    <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin" >
+      <parameters>$(find difrobot_controller)/config/difrobot_controllers.yaml</parameters>
+    </plugin>
+  </gazebo>
+
 </robot>
 ```
 ## Crear Launch File para gazebo
@@ -302,71 +366,36 @@ Copie la carpeta models en difrobot_description y cree el archivo gazebo.launch.
 
 ```python
 import os
-from os import pathsep
-from ament_index_python.packages import get_package_share_directory, get_package_prefix
-
+from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable
-from launch.substitutions import Command, LaunchConfiguration
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-
+from launch.substitutions import Command, LaunchConfiguration
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
 
 
 def generate_launch_description():
-    difrobot_description = get_package_share_directory("difrobot_description")
-    difrobot_description_prefix = get_package_prefix("difrobot_description")
-    gazebo_ros_dir = get_package_share_directory("gazebo_ros")
-
-    model_arg = DeclareLaunchArgument(name="model", default_value=os.path.join(
-                                        difrobot_description, "urdf", "difrobot.urdf.xacro"
-                                        ),
-                                      description="Absolute path to robot urdf file"
-    )
-
-    model_path = os.path.join(difrobot_description, "models")
-    model_path += pathsep + os.path.join(difrobot_description_prefix, "share")
-
-    env_var = SetEnvironmentVariable("GAZEBO_MODEL_PATH", model_path)
-
-    robot_description = ParameterValue(Command(["xacro ", LaunchConfiguration("model")]),
-                                       value_type=str)
-
-    robot_state_publisher_node = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        parameters=[{"robot_description": robot_description}]
-    )
-
-    start_gazebo_server = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(gazebo_ros_dir, "launch", "gzserver.launch.py")
-        )
-    )
-
-    start_gazebo_client = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(gazebo_ros_dir, "launch", "gzclient.launch.py")
-        )
-    )
-
-    spawn_robot = Node(package="gazebo_ros", executable="spawn_entity.py",
-                        arguments=["-entity", "difrobot",
-                                   "-topic", "robot_description",
-                                  ],
-                        output="screen"
-    )
-
+    share = get_package_share_directory('difrobot_description')
+    gz_share = get_package_share_directory('ros_gz_sim')
+    resources = os.pathsep.join(filter(None, [os.path.dirname(share),
+        os.path.join(share, 'models'), os.environ.get('GZ_SIM_RESOURCE_PATH', '')]))
+    description = ParameterValue(Command(['xacro ', LaunchConfiguration('model')]), value_type=str)
     return LaunchDescription([
-        env_var,
-        model_arg,
-        start_gazebo_server,
-        start_gazebo_client,
-        robot_state_publisher_node,
-        spawn_robot
+        DeclareLaunchArgument('model', default_value=os.path.join(share, 'urdf', 'difrobot.urdf.xacro')),
+        DeclareLaunchArgument('gz_args', default_value=['-r ', os.path.join(share, 'worlds', 'difrobot.sdf')]),
+        SetEnvironmentVariable('GZ_SIM_RESOURCE_PATH', resources),
+        IncludeLaunchDescription(PythonLaunchDescriptionSource(os.path.join(gz_share, 'launch', 'gz_sim.launch.py')),
+            launch_arguments={'gz_args': LaunchConfiguration('gz_args')}.items()),
+        Node(package='robot_state_publisher', executable='robot_state_publisher',
+            parameters=[{'robot_description': description, 'use_sim_time': True}]),
+        Node(package='ros_gz_sim', executable='create',
+            arguments=['-name', 'difrobot', '-topic', 'robot_description', '-z', '0.05'], output='screen'),
+        Node(package='ros_gz_bridge', executable='parameter_bridge',
+            arguments=['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
+                       '/imu@sensor_msgs/msg/Imu[gz.msgs.IMU'],
+            parameters=[{'use_sim_time': True}], output='screen'),
     ])
-
 ```
 display.launch.py
 ```python
