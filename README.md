@@ -1,7 +1,23 @@
+## Entorno ROS 2 Jazzy
+
+Esta práctica usa Ubuntu 24.04 Noble y ROS 2 Jazzy. Las capturas y videos originales son referencias históricas.
+Instale primero las dependencias mediante los scripts de la rama `main`.
+
+```bash
+source /opt/ros/jazzy/setup.bash
+git clone --branch Clase-URDFRobot --single-branch https://github.com/xXThanatosXx/MobileRobot-Jazzy.git
+mkdir -p ~/difrobot_jazzy_ws/src
+cp -r MobileRobot-Jazzy/difrobot_description ~/difrobot_jazzy_ws/src/
+cd ~/difrobot_jazzy_ws
+rosdep install --from-paths src --ignore-src --rosdistro jazzy -y
+colcon build --symlink-install
+source install/setup.bash
+```
+
 # Clase Robot URDF
 
 
-El objetivo de la presente práctica es conocer los conceptos básico de ROS2 Humble (paquete, nodo, topicos, info y rqt), importar los modelos y crear un launcher para la simulación del comportamiento de un robot móvil
+El objetivo de la presente práctica es conocer los conceptos básico de ROS 2 Jazzy (paquete, nodo, topicos, info y rqt), importar los modelos y crear un launcher para la simulación del comportamiento de un robot móvil
 
 ### Instalación de paquete Turtlesim
 
@@ -96,6 +112,9 @@ En Vscode seleccionar la ruta difrobot_ws/src/difrobot_description/ crear las ca
 En el archivo difrobot.urdf.xacro en Visual Studio code, escriba los siguientes comandos:
 ```xml
 <?xml version="1.0"?>
+<!-- . install/setup.bash  -->
+<!-- ros2 launch urdf_tutorial display.launch.py model:=/home/ros/difrobot_ws/src/difrobot_description/urdf/difrobot.urdf.xacro  -->
+  
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="difrobot">
 
     <link name="base_footprint"/>
@@ -117,6 +136,87 @@ En el archivo difrobot.urdf.xacro en Visual Studio code, escriba los siguientes 
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.033"/>
         
     </joint>
+
+    <link name="wheel_right_link">
+        
+        <visual>
+          <origin xyz="0 0 0" rpy="1.57 0 0" />
+          <geometry>
+            <mesh filename="package://difrobot_description/meshes/wheel_right_link.STL" />
+          </geometry>
+        </visual>
+        
+      </link>
+    
+      <joint name="wheel_right_joint" type="continuous">
+        <origin xyz="0 -0.0701101849418637 0" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="wheel_right_link" />
+        <axis xyz="0 1 0" />
+      </joint>
+
+    <link name="wheel_left_link">
+        
+        <visual>
+          <origin xyz="0 0 0" rpy="-1.57 0 0" />
+          <geometry>
+            <mesh filename="package://difrobot_description/meshes/wheel_left_link.STL" />
+          </geometry>
+        </visual>
+        
+      </link>
+    
+      <joint name="wheel_left_joint" type="continuous">
+        <origin xyz="0 0.0701101849418637 0" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="wheel_left_link" />
+        <axis xyz="0 1 0" />
+      </joint>
+
+      <link name="caster_front_link">
+        
+        <visual>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <geometry>
+            <mesh filename="package://difrobot_description/meshes/caster_front_link.STL" />
+          </geometry>
+        </visual>
+        
+      </link>
+    
+      <joint name="caster_front_joint" type="fixed">
+        <origin xyz="0.04755 0 -0.0275" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="caster_front_link" />
+        <axis xyz="0 0 0" />
+      </joint>
+
+      <link name="caster_rear_link">
+        
+        <visual>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <geometry>
+            <mesh filename="package://difrobot_description/meshes/caster_rear_link.STL" />
+          </geometry>
+        </visual>
+        
+      </link>
+    
+      <joint name="caster_rear_joint" type="fixed">
+        <origin xyz="-0.04755 0 -0.0275" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="caster_rear_link" />
+        <axis xyz="0 0 0" />
+      </joint>
+
+    
+
+
+  
+
+
+
+
 </robot>
 ```
 En el archivo CMAKELists agrege el comando con la ruta de archivos meshes y urdf:
@@ -141,7 +241,7 @@ En una nueva terminal actualizar el bash:
 ```
 instalar en el proyecto el paquete urdf-tutorial
 ```bash
-sudo apt-get install ros-humble-urdf-tutorial
+sudo apt-get install ros-jazzy-urdf-tutorial
 ```
 Ejecutar RVIZ con el modelo difrobot.urdf.xacro:
 ```bash
@@ -329,7 +429,7 @@ ros2 launch difrobot_description display.launch.py
 
 
 ## Restablecer ventana RQT
-Como volver a la configuración de ventanas en rqt en ros2 humble
+Como volver a la configuración de ventanas en rqt en ros2 jazzy
 ```bash
 rm -rf ~/.config/ros.org/rqt_gui.ini
 
