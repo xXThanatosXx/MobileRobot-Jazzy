@@ -1,7 +1,0 @@
-setup.py
-difrobot_controller/__init__.py
-difrobot_controller/simple_controller.py
-difrobot_controller.egg-info/PKG-INFO
-difrobot_controller.egg-info/SOURCES.txt
-difrobot_controller.egg-info/dependency_links.txt
-difrobot_controller.egg-info/top_level.txt
