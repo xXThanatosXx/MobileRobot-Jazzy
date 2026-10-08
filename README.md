@@ -39,6 +39,12 @@ Cambie de rama con `git switch NOMBRE_RAMA`. Cada rama conserva su práctica y o
 Construya cada rama en un espacio limpio: no reutilice `build/`, `install/` ni `log/` de Humble o de otra rama.
 Las capturas y videos originales son referencias históricas; los comandos escritos y archivos fuente actualizados son la guía para Jazzy.
 
+## Optimización de Gazebo y parpadeo
+
+La [guía de optimización de Gazebo Harmonic](OPTIMIZACION_GAZEBO.md) explica cómo dejar Ogre como motor gráfico predeterminado para su usuario, probar soluciones de OpenGL y comprobar el rendimiento.
+
+Las seis ramas de simulación incluyen ahora un paso de física de `0.002` s y sombras desactivadas en `difrobot.sdf`. Si aparecen inestabilidades, vuelva a `0.001` s.
+
 ## Referencias
 
 - [Instalación oficial Jazzy](https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html)
