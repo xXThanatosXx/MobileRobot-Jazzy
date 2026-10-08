@@ -1,6 +1,7 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, GroupAction, OpaqueFunction
 from launch_ros.actions import Node
+from launch_ros.parameter_descriptions import ParameterValue
 from launch.substitutions import LaunchConfiguration
 from launch.conditions import UnlessCondition, IfCondition
 
@@ -17,7 +18,7 @@ def noisy_controller(context, *args, **kwargs):
         package="difrobot_controller",
         executable="noisy_controller.py",
         parameters=[
-            {"wheel_radius": wheel_radius + wheel_radius_error,
+            {"use_sim_time": True, "wheel_radius": wheel_radius + wheel_radius_error,
              "wheel_separation": wheel_separation + wheel_separation_error}],
         condition=IfCondition(use_python),
     )
@@ -49,7 +50,7 @@ def generate_launch_description():
 
     use_python_arg = DeclareLaunchArgument(
         "use_python",
-        default_value="False",
+        default_value="True",
     )
     wheel_radius_arg = DeclareLaunchArgument(
         "wheel_radius",
@@ -71,7 +72,7 @@ def generate_launch_description():
         arguments=[
             "joint_state_broadcaster",
             "--controller-manager",
-            "/controller_manager",
+            "/controller_manager", "--controller-manager-timeout", "120",
         ],
     )
 
@@ -100,16 +101,16 @@ def generate_launch_description():
                 package="difrobot_controller",
                 executable="simple_controller.py",
                 parameters=[
-                    {"wheel_radius": wheel_radius,
-                     "wheel_separation": wheel_separation}],
+                    {"use_sim_time": True, "wheel_radius": ParameterValue(wheel_radius, value_type=float),
+                     "wheel_separation": ParameterValue(wheel_separation, value_type=float)}],
                 condition=IfCondition(use_python),
             ),
             Node(
                 package="difrobot_controller",
                 executable="simple_controller",
                 parameters=[
-                    {"wheel_radius": wheel_radius,
-                     "wheel_separation": wheel_separation}],
+                    {"use_sim_time": True, "wheel_radius": ParameterValue(wheel_radius, value_type=float),
+                     "wheel_separation": ParameterValue(wheel_separation, value_type=float)}],
                 condition=UnlessCondition(use_python),
             ),
         ]

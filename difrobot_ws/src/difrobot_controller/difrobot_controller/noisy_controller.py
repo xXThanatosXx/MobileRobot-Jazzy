@@ -22,8 +22,8 @@ class NoisyController(Node):
         self.wheel_radius_ = self.get_parameter("wheel_radius").get_parameter_value().double_value
         self.wheel_separation_ = self.get_parameter("wheel_separation").get_parameter_value().double_value
 
-        self.get_logger().info("Using wheel radius %d" % self.wheel_radius_)
-        self.get_logger().info("Using wheel separation %d" % self.wheel_separation_)
+        self.get_logger().info("Using wheel radius %f" % self.wheel_radius_)
+        self.get_logger().info("Using wheel separation %f" % self.wheel_separation_)
 
         self.left_wheel_prev_pos_ = 0.0
         self.right_wheel_prev_pos_ = 0.0
@@ -57,22 +57,34 @@ class NoisyController(Node):
 
     
     def jointCallback(self, msg):
+        try:
+            left_position = msg.position[msg.name.index("wheel_left_joint")]
+            right_position = msg.position[msg.name.index("wheel_right_joint")]
+        except (ValueError, IndexError):
+            return
+        current_time = Time.from_msg(msg.header.stamp)
+        if not getattr(self, "joint_initialized_", False) or current_time <= self.prev_time_:
+            self.left_wheel_prev_pos_ = left_position
+            self.right_wheel_prev_pos_ = right_position
+            self.prev_time_ = current_time
+            self.joint_initialized_ = True
+            return
         # Implements the inverse differential kinematic model
         # Given the position of the wheels, calculates their velocities
         # then calculates the velocity of the robot wrt the robot frame
         # and then converts it in the global frame and publishes the TF
 
         # Add noise to wheel readings
-        wheel_encoder_left = msg.position[1] + np.random.normal(0, 0.005)
-        wheel_encoder_right = msg.position[0] + np.random.normal(0, 0.005)
+        wheel_encoder_left = left_position + np.random.normal(0, 0.005)
+        wheel_encoder_right = right_position + np.random.normal(0, 0.005)
 
         dp_left = wheel_encoder_left - self.left_wheel_prev_pos_
         dp_right = wheel_encoder_right - self.right_wheel_prev_pos_
         dt = Time.from_msg(msg.header.stamp) - self.prev_time_
 
         # Actualize the prev pose for the next itheration
-        self.left_wheel_prev_pos_ = msg.position[1]
-        self.right_wheel_prev_pos_ = msg.position[0]
+        self.left_wheel_prev_pos_ = left_position
+        self.right_wheel_prev_pos_ = right_position
         self.prev_time_ = Time.from_msg(msg.header.stamp)
 
         # Calculate the rotational speed of each wheel
