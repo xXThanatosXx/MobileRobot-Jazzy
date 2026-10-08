@@ -1,3 +1,37 @@
+## Entorno ROS 2 Jazzy
+
+Esta práctica usa Ubuntu 24.04 Noble y ROS 2 Jazzy. Las capturas y videos originales son referencias históricas.
+Instale primero las dependencias mediante los scripts de la rama `main`.
+
+```bash
+source /opt/ros/jazzy/setup.bash
+git clone --branch Clase-Imu --single-branch https://github.com/xXThanatosXx/MobileRobot-Jazzy.git
+cd MobileRobot-Jazzy/difrobot_ws
+rosdep install --from-paths src --ignore-src --rosdistro jazzy -y
+colcon build --symlink-install
+source install/setup.bash
+```
+
+### Simulación en Jazzy
+
+En terminales separadas, cargue `/opt/ros/jazzy/setup.bash` y el `install/setup.bash` de este workspace:
+
+```bash
+ros2 launch difrobot_description gazebo.launch.py
+```
+
+```bash
+ros2 launch difrobot_controller controller.launch.py use_python:=true
+```
+
+```bash
+ros2 topic pub --use-sim-time --rate 10 /difrobot_controller/cmd_vel geometry_msgs/msg/TwistStamped "{header: auto, twist: {linear: {x: 0.02}, angular: {z: 0.0}}}"
+```
+
+Para usar el controlador diferencial estándar: `use_simple_controller:=false`.
+El puente publica `/clock` y, en la rama IMU, `/imu`. Los nodos de odometría usan tiempo simulado.
+En un entorno sin pantalla puede iniciar el servidor con `gz_args:='-r -s <ruta-absoluta>/worlds/difrobot.sdf'`.
+
 
 # Simulación Imu 
 
@@ -30,20 +64,7 @@ ros2 launch difrobot_controller controller.launch.py use_python:=true
 
 
 ```bash
-ros2 topic pub /difrobot_controller/cmd_vel geometry_msgs/msg/TwistStamped "header:
-  stamp:
-    sec: 0
-    nanosec: 0
-  frame_id: ''
-twist:
-  linear:
-    x: 0.5
-    y: 0.0
-    z: 0.0
-  angular:
-    x: 0.0
-    y: 0.0
-    z: 0.0" 
+ros2 topic pub --use-sim-time --rate 10 /difrobot_controller/cmd_vel geometry_msgs/msg/TwistStamped "{header: auto, twist: {linear: {x: 0.02}, angular: {z: 0.0}}}"
 ```
 
 
@@ -102,7 +123,8 @@ twist:
             </z>
           </linear_acceleration>
         </imu>
-        <plugin name="imu" filename="libgazebo_ros_imu_sensor.so"/>
+        <topic>/imu</topic>
+        <gz_frame_id>imu_link</gz_frame_id>
     </sensor>
   </gazebo>
 ```
