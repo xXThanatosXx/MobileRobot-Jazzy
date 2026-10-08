@@ -1,6 +1,0 @@
-Invoking command in '/home/ros/difrobot_ws/build/difrobot_firmware': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/ros/difrobot_ws/src/difrobot_firmware -DCMAKE_INSTALL_PREFIX=/home/ros/difrobot_ws/install/difrobot_firmware
-Invoked command in '/home/ros/difrobot_ws/build/difrobot_firmware' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/ros/difrobot_ws/src/difrobot_firmware -DCMAKE_INSTALL_PREFIX=/home/ros/difrobot_ws/install/difrobot_firmware
-Invoking command in '/home/ros/difrobot_ws/build/difrobot_firmware': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/ros/difrobot_ws/build/difrobot_firmware -- -j2 -l2
-Invoked command in '/home/ros/difrobot_ws/build/difrobot_firmware' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/ros/difrobot_ws/build/difrobot_firmware -- -j2 -l2
-Invoking command in '/home/ros/difrobot_ws/build/difrobot_firmware': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/ros/difrobot_ws/build/difrobot_firmware
-Invoked command in '/home/ros/difrobot_ws/build/difrobot_firmware' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/ros/difrobot_ws/build/difrobot_firmware

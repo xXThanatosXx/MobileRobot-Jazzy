@@ -2,48 +2,24 @@
 
 <robot name="difrobot" xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <gazebo reference = "base_link">
-    <material>Gazebo/Blue</material>
-  </gazebo>
-  <gazebo reference = "wheel_left_link">
-    <material>Gazebo/Green</material>
-  </gazebo>
+  
+  
 
-  <gazebo reference = "wheel_right_link">
-    <material>Gazebo/Green</material>
-  </gazebo>
+  
 
-  <gazebo reference = "caster_front_link">
-    <material>Gazebo/Yellow</material>
-  </gazebo>
+  
 
-  <gazebo reference = "caster_rear_link">
-    <material>Gazebo/Purple</material>
-  </gazebo>
+  
 
 
 
-<transmission name = "wheel_right_transmission">
-  <plugin>transmission_interface/SimpleTransmission</plugin> 
-  <actuator name="wheel_right_motor" role="actuator_right"/>
-  <joint name="wheel_right_motor" role="joint_right">
-    <mechanical_reduction>1.0</mechanical_reduction>
-  </joint>
 
-</transmission>
 
-<transmission name = "wheel_left_transmission">
-  <plugin>transmission_interface/SimpleTransmission</plugin> 
-  <actuator name="wheel_left_motor" role="actuator_left"/>
-  <joint name="wheel_left_motor" role="joint_left">
-    <mechanical_reduction>1.0</mechanical_reduction>
-  </joint>
 
-</transmission>
   <!-- Wheels -->
   <gazebo reference="wheel_left_link">
-    <mu1>1000000000000000.0</mu1>
-    <mu2>1000000000000000.0</mu2>
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
     <kp>1000000000000.0</kp>
     <kd>10.0</kd>
     <minDepth>0.001</minDepth>
@@ -52,8 +28,8 @@
   </gazebo>
   
   <gazebo reference="wheel_right_link">
-    <mu1>1000000000000000.0</mu1>
-    <mu2>1000000000000000.0</mu2>
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
     <kp>1000000000000.0</kp>
     <kd>10.0</kd>
     <minDepth>0.001</minDepth>
@@ -81,9 +57,7 @@
   </gazebo>
 
   <gazebo>
-    <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control" >
-      <robot_param>robot_description</robot_param>
-      <robot_param_node>robot_state_publisher</robot_param_node>
+    <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin" >
       <parameters>$(find difrobot_controller)/config/difrobot_controllers.yaml</parameters>
     </plugin>
   </gazebo>
